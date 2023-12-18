@@ -1,0 +1,30 @@
+minikube start
+
+==== To create/ delete / update / rollout / undo deployment ====
+kubectl create deployment first-app --image=sumantra/kub-first-app
+kubectl delete deployment first-app
+kubectl set image deployment/first-app kub-first-app=sumantram/kub-first-app[:<version>]
+kubectl rollout status deployment/first-app
+
+==== Tagging with docker hub (after creating image in docker.com) ====
+docker build -t kub-first-app[:<version>] .
+docker tag kub-first-app[:<version>] sumantram/kub-first-app[:<version>]
+docker push sumantram/kub-first-app[:<version>]
+kubectl rollout status deployment/first-app
+kubectl rollout undo deployment/first-app [--to-revision=<rev_number>]
+kubectl rollout history deployment/first-app
+
+==== To view deployments ====
+kubectl get deployments
+
+==== To get all the pods ====
+kubectl get pods
+
+==== Service related ====
+type options are = ClusterIP (accessible from inside only), NodePort (node's IP only), LoadBalancer
+kubectl expose deployment first-app --type=LoadBalancer --port=8080
+kubectl get services
+minikube service first-app ## To run the service from outside
+
+=== Scaling ===
+kubectl scale deployment/first-app --replicas=3
